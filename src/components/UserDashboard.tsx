@@ -567,12 +567,7 @@ const UserDashboard = () => {
                 </div>
               </div>
 
-              <button
-                onClick={() => navigate('/chat')}
-                className="mt-4 text-blue-600 hover:text-blue-700 text-sm font-medium"
-              >
-                Continue this conversation →
-              </button>
+              
             </div>
           ))}
         </div>
