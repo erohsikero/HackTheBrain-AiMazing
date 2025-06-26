@@ -9,12 +9,27 @@ interface Message {
   timestamp: Date;
 }
 
+interface ChatResponse {
+  response: string;
+  session_id: string;
+  timestamp: string;
+}
+
+interface ChatRequest {
+  message: string;
+  session_id?: string;
+}
+
 const ChatBot = () => {
   const navigate = useNavigate();
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [isConnected, setIsConnected] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const API_BASE_URL = 'http://localhost:8001/api/v1';
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -25,6 +40,19 @@ const ChatBot = () => {
   }, [messages]);
 
   useEffect(() => {
+    // Check API health on component mount
+    const checkAPIHealth = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/chat/health`);
+        setIsConnected(response.ok);
+      } catch (error) {
+        console.warn('API health check failed:', error);
+        setIsConnected(false);
+      }
+    };
+
+    checkAPIHealth();
+
     // Initial greeting
     const initialMessage: Message = {
       id: '1',
@@ -46,7 +74,45 @@ const ChatBot = () => {
     }, 1000);
   }, []);
 
-  const getBotResponse = (userMessage: string): string => {
+  const sendMessageToAPI = async (message: string): Promise<string> => {
+    try {
+      const requestBody: ChatRequest = {
+        message: message,
+        session_id: sessionId || undefined
+      };
+
+      const response = await fetch(`${API_BASE_URL}/chat/chat`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data: ChatResponse = await response.json();
+      
+      // Update session ID if this is the first message
+      if (!sessionId) {
+        setSessionId(data.session_id);
+      }
+      
+      setIsConnected(true);
+      return data.response;
+      
+    } catch (error) {
+      console.error('Error calling chat API:', error);
+      setIsConnected(false);
+      
+      // Fallback to local responses if API is unavailable
+      return getBotResponseFallback(message);
+    }
+  };
+
+  const getBotResponseFallback = (userMessage: string): string => {
     const message = userMessage.toLowerCase();
 
     if (message.includes('insurance') || message.includes('coverage')) {
@@ -107,19 +173,77 @@ const ChatBot = () => {
     setInputText('');
     setIsTyping(true);
 
-    // Simulate typing delay
-    setTimeout(() => {
-      const botResponse = getBotResponse(inputText);
+    try {
+      // Call the API instead of local function
+      const botResponseText = await sendMessageToAPI(inputText);
+      
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: botResponse,
+        text: botResponseText,
         isBot: true,
         timestamp: new Date()
       };
 
       setMessages(prev => [...prev, botMessage]);
+      
+    } catch (error) {
+      console.error('Error getting bot response:', error);
+      
+      // Fallback error message
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        text: "I'm sorry, I'm having trouble responding right now. Please try again or contact our clinic directly.",
+        isBot: true,
+        timestamp: new Date()
+      };
+      
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
       setIsTyping(false);
-    }, 1000 + Math.random() * 1000);
+    }
+  };
+
+  const handleQuickAction = async (message: string) => {
+    setInputText(message);
+    
+    // Create and send the message
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      text: message,
+      isBot: false,
+      timestamp: new Date()
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+    setInputText('');
+    setIsTyping(true);
+
+    try {
+      const botResponseText = await sendMessageToAPI(message);
+      
+      const botMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        text: botResponseText,
+        isBot: true,
+        timestamp: new Date()
+      };
+
+      setMessages(prev => [...prev, botMessage]);
+      
+    } catch (error) {
+      console.error('Error getting bot response:', error);
+      
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        text: "I'm sorry, I'm having trouble responding right now. Please try again or contact our clinic directly.",
+        isBot: true,
+        timestamp: new Date()
+      };
+      
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
+      setIsTyping(false);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -146,7 +270,9 @@ const ChatBot = () => {
             </div>
             <div>
               <h1 className="text-xl font-bold text-gray-800">enamAI</h1>
-              <p className="text-sm text-green-600">Online • Ready to help</p>
+              <p className={`text-sm ${isConnected ? 'text-green-600' : 'text-orange-600'}`}>
+                {isConnected ? 'Online • AI-powered' : 'Limited mode • Basic responses'}
+              </p>
             </div>
           </div>
         </div>
@@ -235,21 +361,21 @@ const ChatBot = () => {
             <span>Book Appointment</span>
           </button>
           <button
-            onClick={() => setInputText('What are your hours?')}
+            onClick={() => handleQuickAction('What are your hours?')}
             className="bg-green-100 hover:bg-green-200 text-green-800 px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center space-x-1"
           >
             <Clock className="w-4 h-4" />
             <span>Hours</span>
           </button>
           <button
-            onClick={() => setInputText('What insurance do you accept?')}
+            onClick={() => handleQuickAction('What insurance do you accept?')}
             className="bg-purple-100 hover:bg-purple-200 text-purple-800 px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center space-x-1"
           >
             <Shield className="w-4 h-4" />
             <span>Insurance</span>
           </button>
           <button
-            onClick={() => setInputText('How much does a cleaning cost?')}
+            onClick={() => handleQuickAction('How much does a cleaning cost?')}
             className="bg-orange-100 hover:bg-orange-200 text-orange-800 px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center space-x-1"
           >
             <DollarSign className="w-4 h-4" />
