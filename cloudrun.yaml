@@ -11,19 +11,19 @@ spec:
             - containerPort: 8080
           env:
             - name: VITE_FIREBASE_API_KEY
-              value: "your-firebase-api-key"
+              value: $_VITE_FIREBASE_API_KEY
             - name: VITE_FIREBASE_AUTH_DOMAIN
-              value: "your-firebase-auth-domain"
+              value: $_VITE_FIREBASE_AUTH_DOMAIN
             - name: VITE_FIREBASE_PROJECT_ID
-              value: "your-firebase-project-id"
+              value: $_VITE_FIREBASE_PROJECT_ID
             - name: VITE_FIREBASE_STORAGE_BUCKET
-              value: "your-firebase-storage-bucket"
+              value: $_VITE_FIREBASE_STORAGE_BUCKET
             - name: VITE_FIREBASE_MESSAGING_SENDER_ID
-              value: "your-firebase-messaging-sender-id"
+              value: $_VITE_FIREBASE_MESSAGING_SENDER_ID
             - name: VITE_FIREBASE_APP_ID
-              value: "your-firebase-app-id"
+              value: $_VITE_FIREBASE_APP_ID
             - name: VITE_GEMINI_API_KEY
-              value: "your-gemini-api-key"
+              value: $_VITE_GEMINI_API_KEY
             # Add your environment variables here if needed
             # - name: VITE_FIREBASE_API_KEY
             #   value: "your-firebase-api-key" 
