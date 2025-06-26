@@ -23,8 +23,23 @@ steps:
     args:
       - push
       - '${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_SERVICE_NAME}:$COMMIT_SHA'
-
-images:
-  - '${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_SERVICE_NAME}:$COMMIT_SHA' 
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - ${_SERVICE_NAME}
+      - '--image'
+      - '${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_SERVICE_NAME}:$COMMIT_SHA'
+      - '--region'
+      - ${_DEPLOY_REGION}
+      - '--platform'
+      - ${_PLATFORM}
+      # Uncomment and edit the next lines to set env vars at deploy time
+      - '--set-env-vars'
+      - 'VITE_FIREBASE_API_KEY=${_VITE_FIREBASE_API_KEY},VITE_FIREBASE_AUTH_DOMAIN=${_VITE_FIREBASE_AUTH_DOMAIN},VITE_FIREBASE_PROJECT_ID=${_VITE_FIREBASE_PROJECT_ID},VITE_FIREBASE_STORAGE_BUCKET=${_VITE_FIREBASE_STORAGE_BUCKET},VITE_FIREBASE_MESSAGING_SENDER_ID=${_VITE_FIREBASE_MESSAGING_SENDER_ID},VITE_FIREBASE_APP_ID=${_VITE_FIREBASE_APP_ID},VITE_GEMINI_API_KEY=${_VITE_GEMINI_API_KEY}'
 options:
   logging: CLOUD_LOGGING_ONLY
+timeout: 1200s
+images:
+  - '${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_SERVICE_NAME}:$COMMIT_SHA'
