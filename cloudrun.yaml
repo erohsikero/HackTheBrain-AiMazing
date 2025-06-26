@@ -6,7 +6,7 @@ spec:
   template:
     spec:
       containers:
-        - image: gcr.io/YOUR_PROJECT_ID/dental-clinic-frontend:latest
+        - image: gcr.io/$_AR_PROJECT_ID/dental-clinic-frontend:latest
           ports:
             - containerPort: 8080
           env:
