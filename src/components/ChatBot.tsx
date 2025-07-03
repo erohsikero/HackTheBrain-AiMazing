@@ -28,7 +28,7 @@ const ChatBot = () => {
     // Initial greeting
     const initialMessage: Message = {
       id: '1',
-      text: "Hello! My name is enamAI. Welcome to MH2 dental! I'm here to answer any questions you may have about our clinic!",
+      text: "Hello! My name is enamAI. Welcome to AI dental! I'm here to answer any questions you may have about our clinic!",
       isBot: true,
       timestamp: new Date()
     };
@@ -66,7 +66,7 @@ const ChatBot = () => {
     }
 
     if (message.includes('location') || message.includes('address') || message.includes('where')) {
-      return "MH2 Dental Clinic is conveniently located in the heart of the city. For our exact address and directions, please contact our front desk at your convenience.";
+      return "AI Dental Clinic is conveniently located in the heart of the city. For our exact address and directions, please contact our front desk at your convenience.";
     }
 
     if (message.includes('appointment') || message.includes('book') || message.includes('schedule')) {
@@ -82,7 +82,7 @@ const ChatBot = () => {
     }
 
     if (message.includes('thank') || message.includes('thanks')) {
-      return "You're very welcome! I'm here to help. Is there anything else you'd like to know about MH2 Dental Clinic?";
+      return "You're very welcome! I'm here to help. Is there anything else you'd like to know about AI Dental Clinic?";
     }
 
     if (message.includes('services') || message.includes('treatment')) {

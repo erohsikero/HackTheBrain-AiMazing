@@ -52,7 +52,7 @@ const AppointmentBooking = () => {
           >
             <ArrowLeft className="w-6 h-6 text-gray-600" />
           </button>
-          <h1 className="text-3xl font-bold text-gray-800">MH2 Dental Clinic Appointment Booking</h1>
+          <h1 className="text-3xl font-bold text-gray-800">AI Dental Clinic Appointment Booking</h1>
         </div>
 
         <form onSubmit={handleSubmit} className="bg-white rounded-3xl shadow-xl p-8">

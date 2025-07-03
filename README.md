@@ -1,4 +1,6 @@
-# MH2 Dental Clinic - AiMazing
+# AI Dental Clinic - AiMazing
+
+![Dental AI Clinic Home Page](docs/images/HomePage.png)
 
 A modern, AI-powered dental clinic management platform built with React, Vite, Firebase, and Google Gemini AI. This project streamlines patient management, appointment booking, real-time waitlists, and provides intelligent analytics and chatbot support for both patients and staff.
 
@@ -6,7 +8,7 @@ A modern, AI-powered dental clinic management platform built with React, Vite, F
 
 ## 🚀 Project Overview
 
-**MH2 Dental Clinic - AiMazing** is a web application designed to revolutionize dental clinic operations. It leverages AI and cloud technologies to provide:
+**AI Dental Clinic - AiMazing** is a web application designed to revolutionize dental clinic operations. It leverages AI and cloud technologies to provide:
 - Seamless patient onboarding and authentication
 - Smart appointment booking and waitlist management
 - Real-time chat support powered by Google Gemini AI
@@ -128,22 +130,33 @@ Or use a Cloud Run YAML manifest for advanced configuration.
 ---
 
 ## 📊 Demo & Usage
+- **Live Demo:** [https://hackthebrain-aimazing-505286163804.europe-west1.run.app/](https://hackthebrain-aimazing-505286163804.europe-west1.run.app/)
 - Register or log in as a patient or staff
 - Book appointments, chat with the AI assistant, and view analytics
 - Staff can manage waitlists and view real-time data
 
 ---
 
+## 📽️ Presentation
+- [Project Presentation (Canva PPT)](https://www.canva.com/design/DAGrdz7La3U/53W8o1kv8IaAMkRf6nay3A/view)
+
+---
+
 ## 👥 Authors & Credits
-- Team MH2 Dental Clinic - AiMazing
-- Built for HackTheBrain 2025
+Team AI Dental Clinic - AiMazing
+   - [Kishore Suresh (Me)](https://github.com/erohsikero)
+   - [shihabhasan0161](https://github.com/shihabhasan0161)
+   - [edsontakei](https://github.com/edsontakei)
+   - [yyjemily](https://github.com/yyjemily)
+
+Built for [HackTheBrain](hackthebrain.ca) 2025
 
 ---
 
 ## 🏆 Why This Project?
 - Demonstrates the power of AI and cloud in healthcare
 - Real-world impact for clinics and patients
-- Modern, scalable, and secure architecture
+- Modern, scalable architecture
 
 ---
 
